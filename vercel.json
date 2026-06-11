@@ -3,6 +3,68 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/index-ar",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index-ar.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/raw-district",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/raw-district/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index-en",
+      "destination": "https://raw-district.oaklynrealty.ae/",
+      "permanent": true
+    },
+    {
+      "source": "/index-en.html",
+      "destination": "https://raw-district.oaklynrealty.ae/",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/en",
+      "destination": "https://raw-district.oaklynrealty.ae/",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/en/:path*",
+      "destination": "https://raw-district.oaklynrealty.ae/",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/ar",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/ar/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/oaklyn-links",
+      "destination": "https://oaklynrealty.ae/",
+      "permanent": true
+    },
+    {
+      "source": "/oaklyn-links/:path*",
+      "destination": "https://oaklynrealty.ae/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(styles.css|client.js)",
