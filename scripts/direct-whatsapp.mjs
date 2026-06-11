@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -73,11 +73,29 @@ const patchFile = async (target, patcher) => {
   }
 };
 
+const collectHtmlFiles = async (dir) => {
+  const files = [];
+  try {
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const target = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...(await collectHtmlFiles(target)));
+      } else if (entry.isFile() && entry.name.endsWith(".html")) {
+        files.push(target);
+      }
+    }
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  return files;
+};
+
 for (const target of [path.join(rootDir, "client.js"), path.join(distDir, "client.js")]) {
   await patchFile(target, patchClient);
 }
 
-for (const target of [path.join(rootDir, "index.html"), path.join(distDir, "index.html")]) {
+for (const target of [...(await collectHtmlFiles(rootDir)), ...(await collectHtmlFiles(distDir))]) {
   await patchFile(target, patchHtml);
 }
 
