@@ -8,9 +8,9 @@ const distDir = path.join(rootDir, "dist");
 
 const seo = {
   canonical: "https://raw-district-ae.oaklynrealty.ae/",
-  title: "Raw District دبي من 649 ألف درهم | IMTIAZ",
+  title: "Raw District IMTIAZ دبي | شقق من ٦٤٩ ألف درهم في جبل علي",
   description:
-    "راجع Raw District by IMTIAZ في وسط جبل علي من 649 ألف درهم مع وصول للمترو وخطة 20/30/50. اطلب التفاصيل من Oaklyn Realty.",
+    "تفاصيل Raw District by IMTIAZ في وسط جبل علي من ٦٤٩،٠٠٠ درهم — شقق مفروشة ومترو مباشر. اطلب التفاصيل الآن.",
   image:
     "https://raw-district-ae.oaklynrealty.ae/assets/raw-district/photos/template-exterior-master-aerial.png?v=20260610-new-ar-template",
   locale: "ar_AE",
@@ -144,7 +144,7 @@ const faqSchema = {
       name: "ما هو سعر البداية في Raw District؟",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "يبدأ السعر من 649 ألف درهم، مع ضرورة تأكيد الأسعار والتوافر من المطور قبل الحجز.",
+        text: "يبدأ السعر من ٦٤٩ ألف درهم، مع ضرورة تأكيد الأسعار والتوافر من المطور قبل الحجز.",
       },
     },
     {
