@@ -35,6 +35,26 @@
       "permanent": true
     },
     {
+      "source": "/__oaklyn-lang/ar-thank-you",
+      "destination": "/thank-you",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/ar-thank-you/:path*",
+      "destination": "/thank-you",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/en-thank-you",
+      "destination": "https://raw-district.oaklynrealty.ae/thank-you",
+      "permanent": true
+    },
+    {
+      "source": "/__oaklyn-lang/en-thank-you/:path*",
+      "destination": "https://raw-district.oaklynrealty.ae/thank-you",
+      "permanent": true
+    },
+    {
       "source": "/__oaklyn-lang/en",
       "destination": "https://raw-district.oaklynrealty.ae/",
       "permanent": true
