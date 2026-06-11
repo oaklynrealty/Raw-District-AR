@@ -200,13 +200,18 @@ const applySeo = (html) => {
 const applyThankYouSeo = (html) =>
   html
     .replace(/"source_page":\s*"raw-district\.oaklynrealty\.ae"/g, '"source_page": "raw-district-ae.oaklynrealty.ae"')
+    .replace(/source_page:\s*"raw-district\.oaklynrealty\.ae"/g, 'source_page: "raw-district-ae.oaklynrealty.ae"')
     .replace(/"landing_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/"/g, '"landing_page_url": "https://raw-district-ae.oaklynrealty.ae/"')
+    .replace(/landing_page_url:\s*"https:\/\/raw-district\.oaklynrealty\.ae\/"/g, 'landing_page_url: "https://raw-district-ae.oaklynrealty.ae/"')
     .replace(/<link rel="canonical" href="https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?">/, '<link rel="canonical" href="https://raw-district-ae.oaklynrealty.ae/thank-you">')
     .replace(/<meta property="og:url" content="https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?">/, '<meta property="og:url" content="https://raw-district-ae.oaklynrealty.ae/thank-you">')
+    .replace(/<meta property="og:image" content="https:\/\/raw-district\.oaklynrealty\.ae\/assets\/raw-district\/photos\/[^"]+">/, `<meta property="og:image" content="${seo.image}">`)
+    .replace(/<meta name="twitter:image" content="https:\/\/raw-district\.oaklynrealty\.ae\/assets\/raw-district\/photos\/[^"]+">/, `<meta name="twitter:image" content="${seo.image}">`)
     .replace(/<link rel="canonical" href="https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?">/, '<link rel="canonical" href="https://raw-district-ae.oaklynrealty.ae/thank-you">')
     .replace(/<meta property="og:url" content="https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?">/, '<meta property="og:url" content="https://raw-district-ae.oaklynrealty.ae/thank-you">')
     .replace(/"thank_you_page_url":\s*"https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you"')
     .replace(/"thank_you_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you"')
+    .replace(/thank_you_page_url:\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?"/g, 'thank_you_page_url: "https://raw-district-ae.oaklynrealty.ae/thank-you"')
     .replace(/\s*<script type="application\/ld\+json">\n[\s\S]*?\n<\/script>\n?/g, "\n");
 
 const robotsTxt = `User-agent: *
