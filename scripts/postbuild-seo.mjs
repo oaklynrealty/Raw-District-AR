@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,14 +22,12 @@ const seo = {
   currency: "AED",
   alternates: [
     { hreflang: "ar-AE", href: "https://raw-district-ae.oaklynrealty.ae/" },
-    { hreflang: "ar", href: "https://raw-district-ae.oaklynrealty.ae/" },
     { hreflang: "en-AE", href: "https://raw-district.oaklynrealty.ae/" },
-    { hreflang: "en", href: "https://raw-district.oaklynrealty.ae/" },
     { hreflang: "x-default", href: "https://raw-district.oaklynrealty.ae/" },
   ],
 };
 
-const landingFiles = ["index.html", "index-ar.html", "raw-district/index.html", "__oaklyn-lang/ar/index.html"];
+const landingFiles = ["index.html"];
 const targets = landingFiles.flatMap((file) => [path.join(rootDir, file), path.join(distDir, file)]);
 
 const escapeHtml = (value = "") =>
@@ -144,7 +142,7 @@ const faqSchema = {
       name: "ما هو سعر البداية في Raw District؟",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "يبدأ السعر من ٦٤٩ ألف درهم، مع ضرورة تأكيد الأسعار والتوافر من المطور قبل الحجز.",
+        text: "يبدأ السعر من 649 ألف درهم، مع ضرورة تأكيد الأسعار والتوافر من المطور قبل الحجز.",
       },
     },
     {
@@ -170,7 +168,8 @@ const applySeo = (html) => {
   next = next
     .replace(/"source_page":\s*"raw-district\.oaklynrealty\.ae"/g, '"source_page": "raw-district-ae.oaklynrealty.ae"')
     .replace(/"landing_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/"/g, '"landing_page_url": "https://raw-district-ae.oaklynrealty.ae/"')
-    .replace(/"thank_you_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you/"');
+    .replace(/"thank_you_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you"')
+    .replace(/"ar":\s*"\/index\.html"/g, '"ar": "/"');
   next = upsertTag(next, /<meta name="robots" content="[^"]*">/, '<meta name="robots" content="index, follow">', /<meta name="viewport"[^>]*>/);
   next = upsertTag(next, /<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(seo.title)}</title>`, /<meta name="robots"[^>]*>/);
   next = upsertTag(
@@ -197,12 +196,97 @@ const applySeo = (html) => {
   return next;
 };
 
+const applyThankYouSeo = (html) =>
+  html
+    .replace(/"source_page":\s*"raw-district\.oaklynrealty\.ae"/g, '"source_page": "raw-district-ae.oaklynrealty.ae"')
+    .replace(/"landing_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/"/g, '"landing_page_url": "https://raw-district-ae.oaklynrealty.ae/"')
+    .replace(/<link rel="canonical" href="https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?">/, '<link rel="canonical" href="https://raw-district-ae.oaklynrealty.ae/thank-you">')
+    .replace(/<meta property="og:url" content="https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?">/, '<meta property="og:url" content="https://raw-district-ae.oaklynrealty.ae/thank-you">')
+    .replace(/<link rel="canonical" href="https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?">/, '<link rel="canonical" href="https://raw-district-ae.oaklynrealty.ae/thank-you">')
+    .replace(/<meta property="og:url" content="https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?">/, '<meta property="og:url" content="https://raw-district-ae.oaklynrealty.ae/thank-you">')
+    .replace(/"thank_you_page_url":\s*"https:\/\/raw-district-ae\.oaklynrealty\.ae\/thank-you\/?"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you"')
+    .replace(/"thank_you_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/?"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you"')
+    .replace(/\s*<script type="application\/ld\+json">\n[\s\S]*?\n<\/script>\n?/g, "\n");
+
+const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /__oaklyn-lang/
+Disallow: /oaklyn-links/
+
+Sitemap: https://raw-district-ae.oaklynrealty.ae/sitemap.xml
+`;
+
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://raw-district-ae.oaklynrealty.ae/</loc>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://raw-district-ae.oaklynrealty.ae/"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://raw-district.oaklynrealty.ae/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://raw-district.oaklynrealty.ae/"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+`;
+
+const llmsTxt = `# Raw District by IMTIAZ - Oaklyn Realty
+
+Canonical URL: https://raw-district-ae.oaklynrealty.ae/
+Arabic URL: https://raw-district-ae.oaklynrealty.ae/
+English URL: https://raw-district.oaklynrealty.ae/
+
+Raw District by IMTIAZ is a furnished mixed-use real estate project in Downtown Jebel Ali, Dubai. The project is positioned near Sheikh Zayed Road and Jebel Ali Metro Station, with apartments, workspaces, retail, and social amenities.
+
+Key facts:
+- Developer: IMTIAZ Developments
+- Location: Downtown Jebel Ali, Dubai
+- Starting price: from AED 649,000, subject to developer confirmation
+- Unit types: studios, 1-bedroom, 2-bedroom, and 3-bedroom residences
+- Payment plan: published 20/30/50 structure, subject to developer confirmation
+- Handover: Q1 2029, subject to developer confirmation
+
+Oaklyn Realty provides project information, availability guidance, rental support, and resale support. Oaklyn Realty does not guarantee return on investment, rental income, resale profit, mortgage approval, visa approval, or future price growth.
+
+Contact:
+- Phone: +971 58 583 5230
+- WhatsApp: +971 50 588 6769
+- Email: sales@oaklynrealty.ae
+`;
+
+const writeTextFile = async (baseDir, relativePath, contents) => {
+  const target = path.join(baseDir, relativePath);
+  await mkdir(path.dirname(target), { recursive: true });
+  await writeFile(target, contents);
+};
+
+for (const duplicatePath of ["index-en.html", "index-ar.html", "raw-district", "__oaklyn-lang", "oaklyn-links"]) {
+  await rm(path.join(distDir, duplicatePath), { recursive: true, force: true });
+}
+
 for (const target of targets) {
   try {
     await writeFile(target, applySeo(await readFile(target, "utf8")));
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
   }
+}
+
+for (const target of [path.join(rootDir, "thank-you/index.html"), path.join(distDir, "thank-you/index.html")]) {
+  try {
+    await writeFile(target, applyThankYouSeo(await readFile(target, "utf8")));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+}
+
+for (const [relativePath, contents] of [
+  ["robots.txt", robotsTxt],
+  ["sitemap.xml", sitemapXml],
+  ["llms.txt", llmsTxt],
+]) {
+  await writeTextFile(rootDir, relativePath, contents);
+  await writeTextFile(distDir, relativePath, contents);
 }
 
 console.log("Applied Raw District Arabic SEO post-build fixes.");
