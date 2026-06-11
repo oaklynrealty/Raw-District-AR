@@ -22,6 +22,7 @@ const seo = {
   currency: "AED",
   alternates: [
     { hreflang: "ar-AE", href: "https://raw-district-ae.oaklynrealty.ae/" },
+    { hreflang: "ar", href: "https://raw-district-ae.oaklynrealty.ae/" },
     { hreflang: "en-AE", href: "https://raw-district.oaklynrealty.ae/" },
     { hreflang: "en", href: "https://raw-district.oaklynrealty.ae/" },
     { hreflang: "x-default", href: "https://raw-district.oaklynrealty.ae/" },
@@ -83,6 +84,21 @@ const productSchema = {
   },
   offers: offer,
 };
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${seo.canonical}#webpage`,
+  url: seo.canonical,
+  name: seo.title,
+  description: seo.description,
+  inLanguage: "ar-AE",
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: seo.image,
+  },
+  about: { "@id": `${seo.canonical}#listing` },
+  publisher: { "@id": "https://oaklynrealty.ae/#organization" },
+};
 const listingSchema = {
   "@context": "https://schema.org",
   "@type": "RealEstateListing",
@@ -142,7 +158,7 @@ const faqSchema = {
   ],
 };
 
-const schemaHtml = [organizationSchema, productSchema, listingSchema, breadcrumbSchema, faqSchema]
+const schemaHtml = [organizationSchema, webpageSchema, productSchema, listingSchema, breadcrumbSchema, faqSchema]
   .map((schema) => `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2).replaceAll("</script", "<\\/script")}\n</script>`)
   .join("\n  ");
 const hreflangHtml = seo.alternates
