@@ -167,6 +167,10 @@ const hreflangHtml = seo.alternates
 
 const applySeo = (html) => {
   let next = html;
+  next = next
+    .replace(/"source_page":\s*"raw-district\.oaklynrealty\.ae"/g, '"source_page": "raw-district-ae.oaklynrealty.ae"')
+    .replace(/"landing_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/"/g, '"landing_page_url": "https://raw-district-ae.oaklynrealty.ae/"')
+    .replace(/"thank_you_page_url":\s*"https:\/\/raw-district\.oaklynrealty\.ae\/thank-you\/"/g, '"thank_you_page_url": "https://raw-district-ae.oaklynrealty.ae/thank-you/"');
   next = upsertTag(next, /<meta name="robots" content="[^"]*">/, '<meta name="robots" content="index, follow">', /<meta name="viewport"[^>]*>/);
   next = upsertTag(next, /<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(seo.title)}</title>`, /<meta name="robots"[^>]*>/);
   next = upsertTag(
