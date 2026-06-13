@@ -69,6 +69,11 @@ function patchHtml(html) {
     `${messageFieldHtml}              <div class="field payload-hidden" id="projectField" hidden>`,
   );
 
+  next = next.replace(
+    /تحدث مع كاميلا للحصول على الأسعار/g,
+    "تحدث مع مستشار Oaklyn للحصول على الأسعار",
+  );
+
   return next;
 }
 
