@@ -431,13 +431,10 @@ ${duplicateGuard("phoneFull", "emailNormalized")}    if (leadIdInput) leadIdInpu
 }
 
 function patchHtml(source) {
-  const isArabic = /<html[^>]*(?:lang="ar"|dir="rtl")/i.test(source);
-  const placeholder = isArabic ? "+ مفتاح الدولة" : "+ country code";
-
   return source
     .replace(/(<input id="landing_phone_country"[^>]*type="hidden"[^>]*value=")[^"]*(")/g, "$1$2")
     .replace(/(<span class="country-picker-flag" data-country-picker-flag>)[\s\S]*?(<\/span>)/g, "$1$2")
-    .replace(/(<span class="country-picker-label" data-country-picker-label>)[\s\S]*?(<\/span>)/g, `$1${placeholder}$2`)
+    .replace(/(<span class="country-picker-label" data-country-picker-label>)[\s\S]*?(<\/span>)/g, "$1+971$2")
     .replace(/(<span class="country-picker-code" data-country-picker-code>)[\s\S]*?(<\/span>)/g, "$1$2")
     .replace(/class="country-picker-option is-selected"/g, 'class="country-picker-option"')
     .replace(/aria-selected="true"/g, 'aria-selected="false"');
