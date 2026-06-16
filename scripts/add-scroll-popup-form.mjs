@@ -64,20 +64,20 @@ function renderPopup(countryPickerMarkup) {
 
 const popupCss = `<style id="scroll-lead-popup-css">
   .scroll-lead-popup[hidden]{display:none!important}
-  .scroll-lead-popup{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px}
+  .scroll-lead-popup{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;font-family:"Hanken Grotesk","Noto Sans Arabic",Arial,sans-serif}
   .scroll-lead-popup__backdrop{position:absolute;inset:0;background:rgba(16,14,10,.72);backdrop-filter:blur(10px)}
-  .scroll-lead-popup__panel{position:relative;z-index:1;width:min(620px,100%);max-height:min(88vh,760px);overflow:auto;border:1px solid rgba(201,168,76,.28);border-radius:18px;background:#15130f;color:#e8e1db;box-shadow:0 34px 110px rgba(0,0,0,.52);padding:28px}
+  .scroll-lead-popup__panel{position:relative;z-index:1;width:min(620px,100%);max-height:min(88vh,760px);overflow:auto;border:1px solid rgba(201,168,76,.28);border-radius:8px;background:#15130f;color:#e8e1db;box-shadow:0 34px 110px rgba(0,0,0,.52);padding:28px}
   .scroll-lead-popup__close{position:absolute;top:14px;left:14px;width:38px;height:38px;border:1px solid rgba(201,168,76,.24);border-radius:999px;background:#100e0a;color:#e8e1db;font-size:26px;line-height:1;cursor:pointer}
-  .scroll-lead-popup__eyebrow{margin-bottom:10px;color:#e6c364;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-  .scroll-lead-popup h2{margin:0 0 10px;font-family:"EB Garamond",serif;font-size:clamp(2rem,5vw,3rem);line-height:1.1;color:#fff}
+  .scroll-lead-popup__eyebrow{margin-bottom:10px;color:#e6c364;font-size:12px;font-weight:800;letter-spacing:0;text-transform:uppercase}
+  .scroll-lead-popup h2{margin:0 0 10px;font-family:"Libre Caslon Text","Noto Naskh Arabic",serif;font-size:clamp(2rem,5vw,3rem);line-height:1.1;color:#fff;letter-spacing:0}
   .scroll-lead-popup__copy{margin:0 0 22px;color:#d0c5b2;line-height:1.7}
   .scroll-lead-popup__form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .scroll-lead-popup__field{display:grid;gap:8px}
   .scroll-lead-popup__field--full{grid-column:1/-1}
-  .scroll-lead-popup__field > span{color:#d0c5b2;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .scroll-lead-popup__field > span{color:#d0c5b2;font-size:12px;font-weight:800;letter-spacing:0;text-transform:uppercase}
   .scroll-lead-popup input,
   .scroll-lead-popup textarea,
-  .scroll-lead-popup .country-picker-trigger{width:100%;border:1px solid #4d4637;border-radius:10px;background:#100e0a;color:#e8e1db;padding:.9rem 1rem;font-size:1rem;box-shadow:none}
+  .scroll-lead-popup .country-picker-trigger{width:100%;border:1px solid #4d4637;border-radius:4px;background:#100e0a;color:#e8e1db;padding:.9rem 1rem;font-size:1rem;box-shadow:none}
   .scroll-lead-popup textarea{resize:vertical;line-height:1.6}
   .scroll-lead-popup input:focus,
   .scroll-lead-popup textarea:focus,
@@ -88,19 +88,19 @@ const popupCss = `<style id="scroll-lead-popup-css">
   .scroll-lead-popup .country-picker.is-placeholder .country-picker-label,
   .scroll-lead-popup .country-picker.is-placeholder .country-picker-code{color:rgba(208,197,178,.58)!important}
   .scroll-lead-popup .country-picker-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .scroll-lead-popup .country-picker-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:4;width:min(430px,calc(100vw - 54px));max-height:300px;overflow:hidden;border:1px solid rgba(201,168,76,.25);border-radius:14px;background:#1d1b17;box-shadow:0 24px 58px rgba(0,0,0,.42)}
-  .scroll-lead-popup .country-picker-search{width:calc(100% - 24px)!important;margin:12px;border-color:#4d4637!important;border-radius:10px!important}
+  .scroll-lead-popup .country-picker-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:4;width:min(430px,calc(100vw - 54px));max-height:300px;overflow:hidden;border:1px solid rgba(201,168,76,.25);border-radius:8px;background:#1d1b17;box-shadow:0 24px 58px rgba(0,0,0,.42)}
+  .scroll-lead-popup .country-picker-search{width:calc(100% - 24px)!important;margin:12px;border-color:#4d4637!important;border-radius:4px!important}
   .scroll-lead-popup .country-picker-list{max-height:222px;overflow:auto}
   .scroll-lead-popup .country-picker-option{display:grid;width:100%;grid-template-columns:36px 1fr auto;align-items:center;gap:.8rem;border:0;background:#1d1b17;color:#e8e1db;padding:.75rem 1rem;text-align:right}
   .scroll-lead-popup .country-picker-option:hover,
   .scroll-lead-popup .country-picker-option[aria-selected="true"]{background:#2c2a25}
   .scroll-lead-popup__error{grid-column:1/-1;margin:0;color:#ffb4ab;font-size:.9rem}
-  .scroll-lead-popup__submit{grid-column:1/-1;border:0;border-radius:10px;background:#c9a84c;color:#100e0a;padding:1rem 1.25rem;font-weight:900;cursor:pointer;transition:transform .18s ease,background .18s ease}
+  .scroll-lead-popup__submit{grid-column:1/-1;border:0;border-radius:4px;background:#c9a84c;color:#100e0a;padding:1rem 1.25rem;font-weight:900;cursor:pointer;transition:transform .18s ease,background .18s ease}
   .scroll-lead-popup__submit:hover{background:#e6c364;transform:translateY(-1px)}
   .scroll-lead-popup__disclaimer{grid-column:1/-1;margin:0;color:rgba(208,197,178,.74);font-size:.76rem;line-height:1.7;text-align:center}
   .scroll-lead-popup.is-visible .scroll-lead-popup__panel{animation:scrollLeadPopupIn .36s cubic-bezier(.22,1,.36,1) both}
   @keyframes scrollLeadPopupIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-  @media (max-width:640px){.scroll-lead-popup{align-items:end;padding:10px}.scroll-lead-popup__panel{max-height:88vh;padding:22px;border-radius:18px 18px 0 0}.scroll-lead-popup__form{grid-template-columns:1fr}.scroll-lead-popup__field--full{grid-column:auto}}
+  @media (max-width:640px){.scroll-lead-popup{align-items:end;padding:10px}.scroll-lead-popup__panel{max-height:88vh;padding:22px;border-radius:8px 8px 0 0}.scroll-lead-popup__form{grid-template-columns:1fr}.scroll-lead-popup__field--full{grid-column:auto}}
   @media (prefers-reduced-motion:reduce){.scroll-lead-popup.is-visible .scroll-lead-popup__panel{animation:none!important}}
 </style>`;
 

@@ -12,15 +12,21 @@ const assert = (condition, message) => {
 
 for (const required of [
   'id="raw-ar-noir-color-overrides"',
+  'id="raw-ar-noir-fonts"',
+  "Modern Estate Noir design system",
+  "Libre Caslon Text",
+  "Hanken Grotesk",
+  "Noto Naskh Arabic",
   "#15130f",
   "#100e0a",
   "#e6c364",
   "#c9a84c",
   "#d0c5b2",
   "#25D366",
+  "--raw-noir-surface-container:#221f1b",
+  "border-radius:4px",
 ]) {
   assert(html.includes(required), `Noir color system missing ${required}`);
 }
 
-assert(html.includes("Modern Estate Noir color system"), "Noir style marker missing");
-console.log("Noir color checks passed.");
+console.log("Noir design-system checks passed.");
