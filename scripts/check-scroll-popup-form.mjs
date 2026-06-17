@@ -16,6 +16,7 @@ for (const required of [
   'id="popup_phone"',
   'id="popup_message"',
   "triggerDelay=15000",
+  "var popupOpened=false",
   "window.addEventListener(\"scroll\", startTimerAfterScroll",
   "mainForm.dispatchEvent(new Event(\"submit\"",
   "By submitting this form, you agree to be contacted by our property consultants regarding your inquiry.",
@@ -31,5 +32,9 @@ assert(
   !/<button[^>]+data-country-option[^>]+aria-selected="true"/.test(html),
   "popup must not introduce selected country options by default",
 );
+assert(!html.includes("rawDistrictScrollPopupDismissed"), "popup dismissed state must not persist across refresh");
+assert(!html.includes("rawDistrictScrollPopupShown"), "popup shown state must not persist across refresh");
+assert(!html.includes("sessionStorage.setItem(storageKey"), "popup close should not be saved across refresh");
+assert(!html.includes("sessionStorage.getItem(storageKey"), "popup close should not block refresh");
 
 console.log("Scroll popup form checks passed.");

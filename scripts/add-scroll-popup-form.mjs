@@ -113,11 +113,10 @@ const popupJs = `<script id="scroll-lead-popup-js">
     var mainForm=document.getElementById("landingLeadForm");
     if(!popup || !popupForm || !mainForm) return;
 
-    var storageKey="rawDistrictScrollPopupDismissed";
-    var shownKey="rawDistrictScrollPopupShown";
     var triggerDelay=15000;
     var timer=null;
     var hasStarted=false;
+    var popupOpened=false;
 
     function field(id){return document.getElementById(id);}
     function getValue(id){var el=field(id);return el ? String(el.value || "").trim() : "";}
@@ -126,10 +125,10 @@ const popupJs = `<script id="scroll-lead-popup-js">
     function clearError(){var error=field("scrollLeadPopupError");if(error) error.hidden=true;}
 
     function openPopup(){
-      if(sessionStorage.getItem(storageKey)==="1" || sessionStorage.getItem(shownKey)==="1") return;
+      if(popupOpened) return;
       var success=document.getElementById("landingSuccess");
       if(success && success.classList.contains("is-visible")) return;
-      sessionStorage.setItem(shownKey,"1");
+      popupOpened=true;
       popup.hidden=false;
       popup.setAttribute("aria-hidden","false");
       requestAnimationFrame(function(){popup.classList.add("is-visible");});
@@ -141,11 +140,10 @@ const popupJs = `<script id="scroll-lead-popup-js">
       popup.classList.remove("is-visible");
       popup.setAttribute("aria-hidden","true");
       window.setTimeout(function(){popup.hidden=true;},220);
-      sessionStorage.setItem(storageKey,"1");
     }
 
     function startTimerAfterScroll(){
-      if(hasStarted || sessionStorage.getItem(storageKey)==="1" || sessionStorage.getItem(shownKey)==="1") return;
+      if(hasStarted || popupOpened) return;
       if(window.scrollY < 40) return;
       hasStarted=true;
       timer=window.setTimeout(openPopup,triggerDelay);
@@ -194,7 +192,6 @@ const popupJs = `<script id="scroll-lead-popup-js">
         var success=document.getElementById("landingSuccess");
         var formError=document.getElementById("landingFormError");
         if(success && success.classList.contains("is-visible")){
-          sessionStorage.setItem(storageKey,"1");
           closePopup();
           return;
         }
