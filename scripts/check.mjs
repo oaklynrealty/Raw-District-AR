@@ -123,6 +123,10 @@ for (const field of ['name="full_name"', 'name="phone"', 'name="phone_country_co
   assert(landingHtml.includes(field), `index.html: missing form field ${field}`);
 }
 
+assert(clientJs.includes("validateWebhookLeadPayload"), "client.js: missing final required lead payload validator before Zapier");
+assert(clientJs.includes("lead_webhook_blocked_empty_payload"), "client.js: missing blocked empty-payload tracking event");
+assert(clientJs.includes("Blocked empty lead payload"), "client.js: missing empty lead webhook blocker");
+
 for (const field of [
   'name="passport"',
   'name="emirates_id"',
