@@ -80,6 +80,22 @@ assert(landingHtml.includes("permit-qr.jpeg?v=20260618-permit-qr"), "index.html:
 assert(stylesCss.includes(".template-raw-ar .permit-qr-badge"), "styles.css: missing fixed permit QR badge styles");
 
 const imageTags = [...landingHtml.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
+for (const term of [
+  'event: "lead_success"',
+  'conversion_action: "form_submission"',
+  "lead_email",
+  "lead_phone",
+  "lead_first_name",
+  "lead_last_name",
+  "meta_advanced_matching",
+  "form_submission_confirmed"
+]) {
+  assert(clientJs.includes(term), `client.js: missing confirmed Lead advanced matching term ${term}`);
+}
+
+const genericConversionPushes = clientJs.match(/event:\s*"conversion"/g) || [];
+assert(genericConversionPushes.length === 0, "client.js: generic conversion event should not be used for ad-platform conversions");
+
 assert(imageTags.every((tag) => /\balt=/.test(tag)), "index.html: every image must have alt text");
 assert(!/(?:href|src)="http:\/\//.test(landingHtml), "index.html: mixed-content URL found");
 assert(!landingHtml.includes("raw-district.oaklynrealty.ae/assets"), "index.html: asset URLs must not use English domain");
