@@ -112,7 +112,7 @@ for (const term of [
   "thank_you_page_url",
   "dataLayer",
   "lead_success",
-  "lead_conversion_thank_you",
+  "lead_thank_you_page_view",
   "whatsapp_cta_click",
   "whatsapp_cta_conversion",
 ]) {
@@ -143,7 +143,8 @@ for (const field of [
 assert(thankYouHtml.includes('name="robots" content="noindex, nofollow"'), "thank-you: must remain noindex");
 assert(thankYouHtml.includes(`href="${seo.thankYouUrl}"`), "thank-you: canonical should be slashless");
 assert(!thankYouHtml.includes('"@type": "RealEstateListing"'), "thank-you: should not include listing schema");
-assert(thankYouHtml.includes("lead_conversion_thank_you"), "thank-you: missing conversion event");
+assert(thankYouHtml.includes("lead_thank_you_page_view"), "thank-you: missing analytics page-view event");
+assert(!thankYouHtml.includes("lead_conversion_thank_you"), "thank-you: must not fire form conversion without CRM webhook success");
 
 assert(robotsTxt.includes("Sitemap: https://raw-district-ae.oaklynrealty.ae/sitemap.xml"), "robots.txt: missing sitemap reference");
 assert(sitemapXml.includes("<loc>https://raw-district-ae.oaklynrealty.ae/</loc>"), "sitemap.xml: missing Arabic canonical URL");

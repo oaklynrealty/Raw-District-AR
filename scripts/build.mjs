@@ -1539,7 +1539,6 @@ const renderThankYouTracking = () => `<script>
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(Object.assign({ event: 'lead_thank_you_page_view' }, trackingPayload));
-  window.dataLayer.push(Object.assign({ event: 'lead_conversion_thank_you' }, trackingPayload));
 })();
 </script>`;
 
