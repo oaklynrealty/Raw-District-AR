@@ -39,6 +39,7 @@ for (const file of requiredFiles) {
 const landingHtml = await readDist("index.html");
 const thankYouHtml = await readDist("thank-you/index.html");
 const clientJs = await readDist("client.js");
+const stylesCss = await readDist("styles.css");
 const sitemapXml = await readDist("sitemap.xml");
 const robotsTxt = await readDist("robots.txt");
 const llmsTxt = await readDist("llms.txt");
@@ -74,6 +75,9 @@ assert(landingHtml.includes('"@type": "RealEstateListing"'), "index.html: missin
 assert(landingHtml.includes('"@type": "Product"'), "index.html: missing Product schema");
 assert(landingHtml.includes('"@type": "FAQPage"'), "index.html: missing FAQ schema");
 assert(landingHtml.includes(GTM_CONTAINER_ID), "index.html: missing GTM");
+assert(landingHtml.includes("permit-qr-badge"), "index.html: missing fixed permit QR badge");
+assert(landingHtml.includes("permit-qr.jpeg?v=20260618-permit-qr"), "index.html: missing cache-busted permit QR image");
+assert(stylesCss.includes(".template-raw-ar .permit-qr-badge"), "styles.css: missing fixed permit QR badge styles");
 
 const imageTags = [...landingHtml.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
 assert(imageTags.every((tag) => /\balt=/.test(tag)), "index.html: every image must have alt text");

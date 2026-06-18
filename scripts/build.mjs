@@ -611,6 +611,18 @@ const renderWhatsAppFloat = () => `<div class="whatsapp-float-wrap">
     ${renderWhatsAppLink({ className: "whatsapp-float", label: t("whatsapp_floating_label"), location: "floating_icon", iconOnly: true })}
   </div>`;
 
+const renderPermitQrBadge = () => {
+  const isArabic = getLocaleLang() === "ar";
+  const label = isArabic ? "رمز تصريح المشروع" : "Project permit QR";
+  const ariaLabel = isArabic ? "عرض رمز تصريح المشروع" : "View project permit QR code";
+  const image = withAssetVersion("/assets/raw-district/permit-qr.jpeg");
+
+  return `<a class="permit-qr-badge" href="${escapeHtml(image)}" target="_blank" rel="noopener" aria-label="${escapeHtml(ariaLabel)}" data-permit-qr-badge>
+    <img src="${escapeHtml(image)}" alt="${escapeHtml(label)}" loading="lazy" decoding="async">
+    <span>${escapeHtml(label)}</span>
+  </a>`;
+};
+
 const renderWhatsAppModal = () => `
   <div class="whatsapp-modal" data-whatsapp-modal hidden aria-hidden="true">
     <div class="whatsapp-modal-backdrop" data-whatsapp-modal-close></div>
@@ -1354,6 +1366,7 @@ ${renderRawTemplateNav()}
   </main>
   ${renderFooter()}
   ${renderWhatsAppFloat()}
+  ${renderPermitQrBadge()}
   ${renderWhatsAppModal()}
   <div class="mobile-contact-bar">
     <a href="tel:${escapeHtml(company.phoneHref)}">${escapeHtml(t("mobile_call"))}</a>
@@ -1489,6 +1502,7 @@ ${renderNav()}
   </main>
   ${renderFooter()}
   ${renderWhatsAppFloat()}
+  ${renderPermitQrBadge()}
   ${renderWhatsAppModal()}
   <div class="mobile-contact-bar">
     <a href="tel:${escapeHtml(company.phoneHref)}">${escapeHtml(t("mobile_call"))}</a>
