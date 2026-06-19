@@ -77,7 +77,9 @@ assert(landingHtml.includes('"@type": "FAQPage"'), "index.html: missing FAQ sche
 assert(landingHtml.includes(GTM_CONTAINER_ID), "index.html: missing GTM");
 assert(landingHtml.includes("permit-qr-badge"), "index.html: missing fixed permit QR badge");
 assert(landingHtml.includes("permit-qr.jpeg?v=20260618-permit-qr"), "index.html: missing cache-busted permit QR image");
+assert(!landingHtml.includes('<a class="permit-qr-badge"'), "index.html: permit QR badge should not be clickable");
 assert(stylesCss.includes(".template-raw-ar .permit-qr-badge"), "styles.css: missing fixed permit QR badge styles");
+assert(stylesCss.includes("pointer-events: none;"), "styles.css: permit QR badge should not capture clicks");
 
 const imageTags = [...landingHtml.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
 for (const term of [
