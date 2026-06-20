@@ -129,6 +129,28 @@ assert(clientJs.includes("validateWebhookLeadPayload"), "client.js: missing fina
 assert(clientJs.includes("lead_webhook_blocked_empty_payload"), "client.js: missing blocked empty-payload tracking event");
 assert(clientJs.includes("Blocked empty lead payload"), "client.js: missing empty lead webhook blocker");
 
+for (const term of [
+  "Campaign name",
+  "Lead Name",
+  "Phone (mobile)",
+  "E-mail (mailing)",
+  "Comment text",
+  "Project Name",
+  "GCLID",
+  "FBCLID",
+  "UTM Source",
+  "UTM Medium",
+  "UTM Campaign",
+  "UTM Content",
+  "UTM Term",
+  "Campaign search term",
+  "Whatsapp Tracking Link",
+  "Portal Lead ID",
+  "Property Link"
+]) {
+  assert(clientJs.includes(term), `client.js: missing CRM webhook field alias ${term}`);
+}
+
 for (const field of [
   'name="passport"',
   'name="emirates_id"',

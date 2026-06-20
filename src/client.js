@@ -453,7 +453,8 @@
   const clickIds = {
     gclid: captureClickId("gclid"),
     gbraid: captureClickId("gbraid"),
-    wbraid: captureClickId("wbraid")
+    wbraid: captureClickId("wbraid"),
+    fbclid: captureClickId("fbclid")
   };
 
   const utmData = {
@@ -592,11 +593,15 @@
     const phone = normalizePhone(payload && (payload.phone || payload.phone_number) ? payload.phone || payload.phone_number : "");
     const phoneCountryCode = String(payload && payload.phone_country_code ? payload.phone_country_code : "").trim();
     const email = normalizeEmailValue(payload && payload.email ? payload.email : "");
+    const comment = String(payload && (payload.comment_text || payload.comments || payload.comment || payload.message) ? payload.comment_text || payload.comments || payload.comment || payload.message : "").trim();
+    const projectName = String(payload && (payload.project_name || payload.project) ? payload.project_name || payload.project : "").trim();
 
     if (fullName.length < 2) return "full name is missing";
     if (!phoneCountryCode) return "country code is missing";
     if (!phone || phone.replace(/\D/g, "").length < 8) return "phone number is missing";
     if (!email || !isValidEmailValue(email)) return "email is invalid";
+    if (comment.length < 2) return "comments are missing";
+    if (projectName.length < 2) return "project name is missing";
 
     return "";
   }
@@ -1962,9 +1967,38 @@
         submitBtn.textContent = "Submitting...";
       }
 
+      const submittedAt = new Date().toISOString();
+      const campaignName = utmData.utm_campaign || config.project_name;
+      const adSystem = clickIds.gclid || clickIds.gbraid || clickIds.wbraid ? "Google Ads" : clickIds.fbclid ? "Meta Ads" : "Website";
+      const sourceInformation = [
+        adSystem,
+        utmData.utm_source || config.source_page,
+        utmData.utm_medium || "",
+        utmData.utm_campaign || ""
+      ].filter(Boolean).join(" | ");
+      const campaignSearchTerm = utmData.utm_term || utmData.utm_keyword || params.get("keyword") || "";
+      const propertyLink = config.landing_page_url || window.location.href.split("?")[0];
+      const whatsappTrackingLink = config.whatsappDirectUrl || "";
+      const leadLanguage = document.documentElement.lang || config.current_language || "ar";
+      const selectedCountry = phoneCountryCode;
+      const leadCommentText = [
+        "Project: " + config.project_name,
+        "Lead name: " + fullName,
+        "Phone: " + formPhone,
+        "Email: " + formEmail,
+        "Property preference: " + formInquiry,
+        "Interested in: " + formUnit,
+        "Campaign: " + campaignName,
+        "Source: " + sourceInformation,
+        "Landing page: " + propertyLink,
+        "Lead ID: " + leadId
+      ].join("\n");
+
       const payload = Object.assign(
         {
           lead_id: leadId,
+          event_id: leadId,
+          events_id: leadId,
           first_name: firstName,
           last_name: lastName,
           full_name: fullName,
@@ -1987,23 +2021,82 @@
           source_page: config.source_page,
           landing_page_url: config.landing_page_url,
           thank_you_page_url: config.thank_you_page_url,
+          property_link: propertyLink,
+          whatsapp_tracking_link: whatsappTrackingLink,
+          general_whatsapp_link: whatsappTrackingLink,
+          campaign_name: campaignName,
+          campaign_search_term: campaignSearchTerm,
+          source_information: sourceInformation,
+          ad_system: adSystem,
+          medium: utmData.utm_medium || adSystem,
+          language: leadLanguage,
+          country: selectedCountry,
           project: config.project_name,
           brokerage: "Oaklyn Realty",
-          source: document.referrer || "direct",
-          submitted_at: new Date().toISOString(),
-          timestamp: new Date().toISOString(),
+          source: utmData.utm_source || document.referrer || "direct",
+          submitted_at: submittedAt,
+          timestamp: submittedAt,
           page: window.location.href,
           page_url: window.location.href,
           gclid: clickIds.gclid,
           gbraid: clickIds.gbraid,
           wbraid: clickIds.wbraid,
+          fbclid: clickIds.fbclid,
           google_click_id: clickIds.gclid || clickIds.gbraid || clickIds.wbraid,
+          meta_click_id: clickIds.fbclid,
           buyer_type: "",
           preferred_contact: "",
           budget_range: "",
-          message: "",
+          message: leadCommentText,
+          inquiry_message: leadCommentText,
+          comments: leadCommentText,
+          comment: leadCommentText,
+          comment_text: leadCommentText,
           gdpr_consent:
-            "By submitting this form, you agree to be contacted by Oaklyn Realty regarding your property inquiry."
+            "By submitting this form, you agree to be contacted by Oaklyn Realty regarding your property inquiry.",
+          TITLE: config.project_name + " - " + fullName,
+          "Lead Title": config.project_name + " - " + fullName,
+          FULL_NAME: fullName,
+          NAME: firstName || fullName,
+          LAST_NAME: lastName,
+          PHONE_WORK: formPhone,
+          PHONE_MOBILE: formPhone,
+          EMAIL_WORK: formEmail,
+          COMMENTS: leadCommentText,
+          SOURCE_ID: adSystem,
+          SOURCE_DESCRIPTION: sourceInformation,
+          "Campaign name": campaignName,
+          "Bedroom": formInquiry,
+          "Lead Name": fullName,
+          "Name": firstName || fullName,
+          "Last name": lastName,
+          "Source information": sourceInformation,
+          "Comment": leadCommentText,
+          "Ad system": adSystem,
+          "Medium": utmData.utm_medium || adSystem,
+          "Ad campaign UTM": utmData.utm_campaign,
+          "Campaign contents": utmData.utm_content,
+          "Campaign search term": campaignSearchTerm,
+          "Language": leadLanguage,
+          "Property Type": formInquiry,
+          "Whatsapp Tracking Link": whatsappTrackingLink,
+          "Events ID": leadId,
+          "Interested IN": config.project_name,
+          "Portal Lead ID": leadId,
+          "Property Link": propertyLink,
+          "Comments": leadCommentText,
+          "Project Name": config.project_name,
+          "GCLID": clickIds.gclid,
+          "FBCLID": clickIds.fbclid,
+          "UTM Source": utmData.utm_source,
+          "UTM Medium": utmData.utm_medium,
+          "UTM Campaign": utmData.utm_campaign,
+          "UTM Content": utmData.utm_content,
+          "UTM Term": utmData.utm_term,
+          "Phone (mobile)": formPhone,
+          "E-mail (mailing)": formEmail,
+          "Comment text": leadCommentText,
+          "Country": selectedCountry
         },
         utmData
       );
